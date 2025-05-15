@@ -1,0 +1,10 @@
+{
+  "watch": ["src", "index.ts"],
+  "ext": "ts",
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "ts-node --transpile-only index.ts",
+  "events": {
+    "crash": "echo 'Application crashed - automatically restarting...'"
+  },
+  "delay": "1500"
+}
