@@ -6,6 +6,7 @@ import environment from "dotenv-flow";
 import cors from "cors";
 import morgan from "morgan";
 import { UserRouter } from "../modules/user/routes";
+import { HandlerException } from "./handlerException/handlerException";
 
 environment.config({ silent: true });
 const api = process.env.API_URL || "/api/v1";
@@ -29,5 +30,14 @@ app.use("/health", (req: Request, res: Response) => {
 // User
 app.use("/api/v1/user", UserRouter);
 
+// Middleware para manejar errores 404
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const error = new Error(`Route ${req.originalUrl} not found`);
+  res.status(404);
+  next(error);
+});
+
+// Middleware global para capturar todos los errores de la aplicación
+app.use(HandlerException);
 
 export default app;

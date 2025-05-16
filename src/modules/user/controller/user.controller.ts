@@ -10,8 +10,9 @@ import { LoginUserDto } from '../application/dto/loginUser.dto';
 //***************** services **************//
 import { JwtService } from '../services/auth/jwt.service';
 import { UserRepository } from '../infrastructure/persistence/user.repository';
-import { handleResponse } from '../../../helpers';
+import { handleResponse, HttpCode } from '../../../helpers';
 import { AuthMiddleware } from '../../../shared/middlewares/AuthMiddleware';
+import { asyncHandler } from '../../../shared/utils/asyncHandler';
 
 // Instancia de servicios necesarios
 const userRepository = new UserRepository();
@@ -28,45 +29,32 @@ export const UserControllers = Router();
 /**
  * Register a new user
  */
-UserControllers.post("/register", async (req: Request, res: Response) => {
+UserControllers.post("/register", asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   const registerDto = new RegisterUserDto(name, email, password);
   const user = await registerUserUseCase.execute(registerDto);
 
-  handleResponse(res, 201, user);
-});
+  handleResponse(res, HttpCode.CREATED, user);
+}));
 
 /**
  * Login a user
  */
-UserControllers.post("/login", async (req: Request, res: Response) => {
-  try {
+UserControllers.post("/login", asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const loginDto = new LoginUserDto(email, password);
     const loginResponse = await loginUserUseCase.execute(loginDto);
 
-    handleResponse(res, 200, loginResponse);
-  } catch (error) {
-    console.error("Error in login controller:", error);
-    if (error instanceof Error) {
-      if (error.message === 'Invalid credentials') {
-        handleResponse(res, 401, { message: "Invalid email or password" });
-      } else {
-        handleResponse(res, 500, { message: "An error occurred during login" });
-      }
-    } else {
-      handleResponse(res, 500, { message: "An unknown error occurred" });
-    }
-  }
-});
+    handleResponse(res, HttpCode.OK, loginResponse);
+}));
 
 /**
  * Get user profile
  */
-UserControllers.get("/profile", authMiddleware.authenticate, async (req: Request, res: Response) => {
+UserControllers.get("/profile", authMiddleware.authenticate, asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const userProfile = await getUserProfileUseCase.execute(userId);
 
-  handleResponse(res, 200, userProfile);
-});
+  handleResponse(res, HttpCode.OK, userProfile);
+}));

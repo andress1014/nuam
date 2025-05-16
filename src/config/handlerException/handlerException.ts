@@ -10,31 +10,41 @@ import { handleError, AppError, HttpCode} from "../../helpers";
   * @param res Respuesta de la petición
   * @param next Funcion para dar continuidad con la aplicación
  */
-export const HandlerException = async (error: Error, req: Request, res: Response, next: NextFunction) => {
+export const HandlerException = async (error: Error | AppError<any> | any, req: Request, res: Response, next: NextFunction) => {
     // Check if headers already sent to client
     if (res.headersSent) {
         return next(error);
     }
 
     let status = HttpCode.INTERNAL_SERVER_ERROR;
+    let message = 'Internal Server Error';
     let detailsError;
 
-    try {
-        if (error instanceof AppError) {
+    try {        if (error instanceof AppError) {
+            // Si es un AppError, usa sus propiedades
             status = error.status;
+            message = error.message;
             detailsError = error.detailsError;
+            
+           log.error('AppError captured:', { status, message, details: detailsError });
+        } else if (error instanceof Error) {
+            // Si es un Error normal, usa su mensaje
+            message = error.message || 'Unknown error occurred';
+        } else if (typeof error === 'string') {
+            // Si es un string, úsalo como mensaje
+            message = error;
         }
         
-        log.error(`Error handling request to ${req.method} ${req.path}: ${error.message}`);
+        log.error(`Error handling request to ${req.method} ${req.path}: ${message}`);
         
         if (error.stack) {
-            log.debug(error.stack);
+            console.debug(error.stack);
         }
         
-        handleError(res, status, error.message, detailsError);
+        handleError(res, status, message, detailsError);
     } catch (handlingError) {
         // In case the error handler itself throws an error
-        console.error('Error in error handler:', handlingError);
+       log.error('Error in error handler:', handlingError);
         res.status(500).json({
             status: HttpCode.INTERNAL_SERVER_ERROR,
             message: 'An unexpected error occurred while processing your request'

@@ -1,4 +1,8 @@
 import { Request, Response } from "express";
+import { EventEmitter } from 'events';
+
+// Aumentar el límite de oyentes para evitar la advertencia "MaxListenersExceededWarning"
+EventEmitter.defaultMaxListeners = 20;
 
 import app from "./src/config/app";
 import logger from "./src/config/logger/logger"
