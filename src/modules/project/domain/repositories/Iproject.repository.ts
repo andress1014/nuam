@@ -4,7 +4,7 @@ import { Transaction } from "sequelize";
 
 // Repository interface that defines operations for project data management
 export interface IProjectRepository {
-  save(project: Project): Promise<Project>;
+  save(project: Project, transaction?: Transaction): Promise<Project>;
   findById(id: string): Promise<Project | null>;
   findByUserId(userId: string): Promise<Project[]>;
   findAll(): Promise<Project[]>;

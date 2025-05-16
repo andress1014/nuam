@@ -152,7 +152,7 @@ TaskControllers.get("/:taskId/history", validateGetTaskHistory, asyncHandler(asy
  * Mass assignment of tasks to users
  */
 TaskControllers.post("/projects/:projectId/assign-tasks", validateAssignTasks, asyncHandler(async (req: Request, res: Response) => {
-  const { projectId } = req.params;
+    const { projectId } = req.params;
   const { assignments } = req.body;
   const assignedByUserId = req.user?.id;
   

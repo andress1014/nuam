@@ -7,14 +7,14 @@ import { connection } from "../../../../config/postgres/postgres-sequelize";
 import { Transaction } from "sequelize";
 
 export class ProjectRepository implements IProjectRepository {
-  async save(project: Project): Promise<Project> {
+  async save(project: Project, transaction?: Transaction): Promise<Project> {
     try {
       // Create project in database
       const createdProject = await ProjectModel.create({
         name: project.name,
         description: project.description,
         createdBy: project.createdBy
-      });
+      }, { transaction });
 
       // Map DB entity to domain entity
       return Project.create({
