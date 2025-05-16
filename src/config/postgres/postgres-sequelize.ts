@@ -36,10 +36,10 @@ export const DBPostgres = async () => {
 
     await connection.authenticate();
     log.info('[DatabasePostgres]: Connection has been established successfully.');
-    
-    // Sync models with the database - be careful with force:true in production
-    await connection.sync({ alter: process.env.NODE_ENV === 'development' });
-    log.info('[DatabasePostgres]: Models synchronized with database.');
+      // Force sync models with the database - this will drop and recreate tables
+    // Note: Remove force:true after initial setup to avoid data loss
+    await connection.sync({ force: true });
+    log.info('[DatabasePostgres]: Models synchronized with database (tables recreated).');
     
     return connection;
   } catch (error) {

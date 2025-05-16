@@ -1,8 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { UserAttributes, UserCreationAttributes } from './user.model.interface';
-import bcrypt from 'bcrypt';
 
-export class UserModel extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class UserEntity extends Model {
   public id!: string;
   public name!: string;
   public email!: string;
@@ -13,7 +11,7 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
 
   // Static method to initialize the model
   public static initialize(sequelize: Sequelize): void {
-    UserModel.init(
+    UserEntity.init(
       {
         id: {
           type: DataTypes.UUID,
@@ -35,7 +33,8 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
         password: {
           type: DataTypes.STRING(100),
           allowNull: false,
-        },        createdAt: {
+        },
+        createdAt: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW,
           field: 'created_at',
@@ -44,33 +43,14 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW,
           field: 'updated_at',
-        },
+        }
       },
       {
         sequelize,
         tableName: 'users',
         timestamps: true,
         underscored: true,
-        hooks: {
-          beforeCreate: async (user: UserModel) => {
-            if (user.password) {
-              const salt = await bcrypt.genSalt(10);
-              user.password = await bcrypt.hash(user.password, salt);
-            }
-          },
-          beforeUpdate: async (user: UserModel) => {
-            if (user.changed('password')) {
-              const salt = await bcrypt.genSalt(10);
-              user.password = await bcrypt.hash(user.password, salt);
-            }
-          }
-        }
       }
     );
-  }
-
-  // Static method to set up associations
-  public static associate(models: any): void {
-    // Will be implemented when other models are defined
   }
 }
