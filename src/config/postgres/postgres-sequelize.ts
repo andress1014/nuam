@@ -1,14 +1,17 @@
 import { Sequelize } from 'sequelize';
 import { initializeModels } from '../../models';
+import dotenv from 'dotenv-flow';
 
-const {
-  POSTGRES_HOST = 'localhost',
-  POSTGRES_PORT = 5432,
-  POSTGRES_USER = 'postgres',
-  POSTGRES_PASSWORD = 'postgres',
-  POSTGRES_DB = 'nuam',
-  POSTGRES_SCHEMA = 'public',
-}: any = process.env;
+// Make sure environment variables are loaded
+dotenv.config({ silent: true });
+
+// Ensure we have default values in case environment variables are missing
+const POSTGRES_HOST = process.env.POSTGRES_HOST || 'localhost';
+const POSTGRES_PORT = process.env.POSTGRES_PORT || '5432';
+const POSTGRES_USER = process.env.POSTGRES_USER || 'postgres';
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD || 'postgres';
+const POSTGRES_DB = process.env.POSTGRES_DB || 'nuam_technical';
+const POSTGRES_SCHEMA = process.env.POSTGRES_SCHEMA || 'public';
 
 /**
  * Configuracion de ORM
@@ -31,15 +34,26 @@ export const connection = new Sequelize(POSTGRES_DB, POSTGRES_USER, POSTGRES_PAS
  */
 export const DBPostgres = async () => {
   try {
-    initializeModels(connection);    await connection.authenticate();
-    log.info('[DatabasePostgres]: Connection has been established successfully.');
+    console.log("Connecting to PostgreSQL with:", {
+      host: POSTGRES_HOST,
+      port: POSTGRES_PORT,
+      user: POSTGRES_USER,
+      database: POSTGRES_DB,
+      schema: POSTGRES_SCHEMA
+    });
+    
+    // Initialize models before authenticating
+    initializeModels(connection);
+    await connection.authenticate();
+    
+    console.info('[DatabasePostgres]: Connection has been established successfully.');
     await connection.sync({ force: false, alter: true });
-    log.info('[DatabasePostgres]: Models synchronized with database.');
+    console.info('[DatabasePostgres]: Models synchronized with database.');
     
     return connection;
   } catch (error) {
     let message = '[DatabasePostgres]: Unable to connect to the database:';
-    log.error(`${message} ${error}`);
-    throw new Error(message);
+    console.error(`${message} ${error}`);
+    throw new Error(`${message} ${error}`);
   }
 };

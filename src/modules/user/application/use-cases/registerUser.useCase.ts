@@ -10,13 +10,13 @@ export class RegisterUserUseCase {
       console.error('User with this email already exists');
       throw new Error('User with this email already exists');
     }
-    
-    // Crear directamente el objeto User y guardarlo con el repositorio
+      // Create the User object directly and save it with the repository
     const userToSave = new User(
-      '', // id vacío para nueva creación
+      '', // empty id for new creation
       userData.name,
       userData.email,
       userData.password, // Password will be hashed in the repository layer
+      'user', // default role
       undefined,
       undefined
     );

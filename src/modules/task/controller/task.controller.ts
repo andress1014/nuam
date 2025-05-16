@@ -8,12 +8,16 @@ import { DeleteTaskUseCase } from '../application/use-cases/deleteTask.useCase';
 import { AddTaskCommentUseCase } from '../application/use-cases/addTaskComment.useCase';
 import { GetTaskCommentsUseCase } from '../application/use-cases/getTaskComments.useCase';
 import { GetTaskHistoryUseCase } from '../application/use-cases/getTaskHistory.useCase';
+import { AssignTasksUseCase } from '../application/use-cases/assignTasks.useCase';
 //***************** DTOs **************//
 import { CreateTaskDto } from '../application/dto/createTask.dto';
 import { UpdateTaskDto } from '../application/dto/updateTask.dto';
 import { AddTaskCommentDto } from '../application/dto/addTaskComment.dto';
+import { AssignTasksDto, TaskAssignmentItem } from '../application/dto/assignTasks.dto';
 //***************** services **************//
+import { ITaskRepository } from '../domain/repositories/Itask.repository';
 import { TaskRepository } from '../infrastructure/persistence/task.repository';
+import { TaskAssignmentService } from '../services/taskAssignment.service';
 import { handleResponse, HttpCode } from '../../../helpers';
 import { asyncHandler } from '../../../shared/utils/asyncHandler';
 //***************** validators **************//
@@ -25,9 +29,14 @@ import { validateDeleteTask } from '../validator/deleteTask.validator';
 import { validateAddTaskComment } from '../validator/addTaskComment.validator';
 import { validateGetTaskComments } from '../validator/getTaskComments.validator';
 import { validateGetTaskHistory } from '../validator/getTaskHistory.validator';
+import { validateAssignTasks } from '../validator/assignTasks.validator';
 
 // Instancia del repositorio necesario
-const taskRepository = new TaskRepository();
+// Using a type assertion with unknown to force the type conversion
+const taskRepository = new TaskRepository() as unknown as ITaskRepository;
+
+// Instancia de servicios
+const taskAssignmentService = new TaskAssignmentService();
 
 // Instancia de casos de uso
 const createTaskUseCase = new CreateTaskUseCase(taskRepository);
@@ -38,6 +47,7 @@ const deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
 const addTaskCommentUseCase = new AddTaskCommentUseCase(taskRepository);
 const getTaskCommentsUseCase = new GetTaskCommentsUseCase(taskRepository);
 const getTaskHistoryUseCase = new GetTaskHistoryUseCase(taskRepository);
+const assignTasksUseCase = new AssignTasksUseCase(taskAssignmentService);
 
 export const TaskControllers = Router();
 
@@ -136,4 +146,18 @@ TaskControllers.get("/:taskId/history", validateGetTaskHistory, asyncHandler(asy
   const history = await getTaskHistoryUseCase.execute(taskId);
 
   handleResponse(res, HttpCode.OK, history);
+}));
+
+/**
+ * Mass assignment of tasks to users
+ */
+TaskControllers.post("/projects/:projectId/assign-tasks", validateAssignTasks, asyncHandler(async (req: Request, res: Response) => {
+  const { projectId } = req.params;
+  const { assignments } = req.body;
+  const assignedByUserId = req.user?.id;
+  
+  const assignTasksDto = new AssignTasksDto(projectId, assignments, assignedByUserId);
+  await assignTasksUseCase.execute(assignTasksDto);
+
+  handleResponse(res, HttpCode.OK, { message: "Tasks assigned successfully" });
 }));

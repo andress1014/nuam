@@ -1,10 +1,14 @@
 import { BaseAttributes, BaseCreationAttributes } from '../base.interface';
 
+// User role type
+export type UserRole = 'admin' | 'user';
+
 // User attributes interface
 export interface UserAttributes extends BaseAttributes {
   name: string;
   email: string;
   password_hash: string;
+  role: UserRole;
   created_at?: Date;
 }
 

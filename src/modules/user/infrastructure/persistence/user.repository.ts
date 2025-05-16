@@ -11,15 +11,15 @@ export class UserRepository implements IUserRepository {
       const createdUser = await UserModel.create({
         name: user.name,
         email: user.email,
-        password_hash: user.password_hash
-      });
-
-      // Map DB entity to domain entity
+        password_hash: user.password_hash,
+        role: 'user',
+      });      // Map DB entity to domain entity
       return User.create({
         id: createdUser.id,
         name: createdUser.name,
         email: createdUser.email,
         password_hash: createdUser.password_hash,
+        role: createdUser.role,
         created_at: createdUser.created_at,
         updatedAt: createdUser.updatedAt
       });
@@ -28,7 +28,6 @@ export class UserRepository implements IUserRepository {
       throw error;
     }
   }
-
   async findById(id: string): Promise<User | null> {
     const user = await UserModel.findByPk(id);
     
@@ -39,11 +38,11 @@ export class UserRepository implements IUserRepository {
       name: user.name,
       email: user.email,
       password_hash: user.password_hash,
+      role: user.role,
       created_at: user.created_at,
       updatedAt: user.updatedAt
     });
   }
-
   async findByEmail(email: string): Promise<User | null> {
     try {
       // Use attributes to avoid field mapping issues
@@ -56,6 +55,7 @@ export class UserRepository implements IUserRepository {
         name: user.name,
         email: user.email,
         password_hash: user.password_hash,
+        role: user.role,
         created_at: user.created_at,
         updatedAt: user.updatedAt
       });
@@ -64,7 +64,6 @@ export class UserRepository implements IUserRepository {
       throw error;
     }
   }
-
   async findAll(): Promise<User[]> {
     const users = await UserModel.findAll();
     
@@ -73,6 +72,7 @@ export class UserRepository implements IUserRepository {
       name: user.name,
       email: user.email,
       password_hash: user.password_hash,
+      role: user.role,
       created_at: user.created_at,
       updatedAt: user.updatedAt
     }));
@@ -90,12 +90,12 @@ export class UserRepository implements IUserRepository {
     }
     
     await user.update(userData);
-    
-    return User.create({
+      return User.create({
       id: user.id,
       name: user.name,
       email: user.email,
       password_hash: user.password_hash,
+      role: user.role,
       created_at: user.created_at,
       updatedAt: user.updatedAt
     });

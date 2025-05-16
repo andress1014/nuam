@@ -7,6 +7,7 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
   public name!: string;
   public email!: string;
   public password_hash!: string;
+  public role!: 'admin' | 'user';
   
   public readonly created_at!: Date;
   public readonly updatedAt!: Date;
@@ -35,6 +36,14 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
           type: DataTypes.STRING(255),
           allowNull: false,
           field: 'password_hash'
+        },
+        role: {
+          type: DataTypes.STRING(20),
+          allowNull: false,
+          defaultValue: 'user',
+          validate: {
+            isIn: [['admin', 'user']],
+          },
         },
         created_at: {
           type: DataTypes.DATE,

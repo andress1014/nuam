@@ -1,6 +1,7 @@
 import { Task } from "../entities/task";
 import { TaskComment } from "../entities/taskComment";
 import { TaskHistory } from "../entities/taskHistory";
+import { TaskAssignment } from "../entities/taskAssignment";
 import { Transaction } from "sequelize";
 
 // Repository interface that defines operations for task data management
@@ -18,6 +19,13 @@ export interface ITaskRepository {
   // Task history operations
   addHistory(history: TaskHistory, transaction?: Transaction): Promise<TaskHistory>;
   getHistoryByTaskId(taskId: string): Promise<TaskHistory[]>;
+  
+  // Task assignment operations
+  assignTask(assignment: TaskAssignment, transaction?: Transaction): Promise<TaskAssignment>;
+  assignTasks(assignments: TaskAssignment[], transaction?: Transaction): Promise<TaskAssignment[]>;
+  getTaskAssignments(taskId: string): Promise<TaskAssignment[]>;
+  removeTaskAssignment(taskId: string, userId: string, transaction?: Transaction): Promise<boolean>;
+  findTaskAssignment(taskId: string, userId: string): Promise<TaskAssignment | null>;
   
   // Transaction management
   getTransaction(): Promise<Transaction>;

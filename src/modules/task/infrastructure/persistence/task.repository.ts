@@ -1,8 +1,9 @@
 import { AppError, HttpCode } from "../../../../helpers";
-import { TaskCommentModel, TaskHistoryModel, TaskModel } from "../../../../models";
+import { TaskCommentModel, TaskHistoryModel, TaskModel, TaskAssignmentModel, UserModel } from "../../../../models";
 import { Task } from "../../domain/entities/task";
 import { TaskComment } from "../../domain/entities/taskComment";
 import { TaskHistory } from "../../domain/entities/taskHistory";
+import { TaskAssignment } from "../../domain/entities/taskAssignment";
 import { ITaskRepository } from "../../domain/repositories/Itask.repository";
 import { connection } from "../../../../config/postgres/postgres-sequelize";
 import { Transaction } from "sequelize";
@@ -329,16 +330,163 @@ export class TaskRepository implements ITaskRepository {
       });
     }
   }
+  // Transaction management methods will be implemented at the end of the class
+  
+  // Task Assignment operations
+  async assignTask(assignment: TaskAssignment, transaction?: Transaction): Promise<TaskAssignment> {
+    try {
+      // Check if assignment already exists
+      const existingAssignment = await this.findTaskAssignment(assignment.taskId, assignment.userId);
+      
+      if (existingAssignment) {
+        throw new AppError({
+          status: HttpCode.CONFLICT,
+          message: 'User is already assigned to this task'
+        });
+      }
+      
+      // Create the assignment
+      const createdAssignment = await TaskAssignmentModel.create({
+        taskId: assignment.taskId,
+        userId: assignment.userId,
+        assignedAt: assignment.assignedAt || new Date()
+      }, { transaction });
+      
+      return TaskAssignment.create({
+        id: createdAssignment.id,
+        taskId: createdAssignment.taskId,
+        userId: createdAssignment.userId,
+        assignedAt: createdAssignment.assignedAt,
+        createdAt: createdAssignment.createdAt,
+        updatedAt: createdAssignment.updatedAt
+      });
+    } catch (error: any) {
+      console.error("Error in assignTask:", error);
+      
+      if (error instanceof AppError) {
+        throw error;
+      }
+      
+      throw new AppError({
+        status: HttpCode.INTERNAL_SERVER_ERROR,
+        message: 'Error assigning task to user',
+        detailsError: error
+      });
+    }
+  }
+  async assignTasks(assignments: TaskAssignment[], transaction?: Transaction): Promise<TaskAssignment[]> {
+    try {
+      // Prepare assignment data
+      const assignmentData = assignments.map(assignment => ({
+        taskId: assignment.taskId,
+        userId: assignment.userId,
+        assignedAt: assignment.assignedAt || new Date()
+      }));
+      
+      // Create all assignments at once
+      const createdAssignments = await TaskAssignmentModel.bulkCreate(assignmentData, { 
+        transaction,
+        // This will ignore duplicates in case any already exist
+        updateOnDuplicate: ["assignedAt", "updatedAt"] 
+      });
+      
+      return createdAssignments.map(assignment => TaskAssignment.create({
+        id: assignment.id,
+        taskId: assignment.taskId,
+        userId: assignment.userId,
+        assignedAt: assignment.assignedAt,
+        createdAt: assignment.createdAt,
+        updatedAt: assignment.updatedAt
+      }));
+    } catch (error: any) {
+      console.error("Error in assignTasks:", error);
+      throw new AppError({
+        status: HttpCode.INTERNAL_SERVER_ERROR,
+        message: 'Error assigning tasks to users',
+        detailsError: error
+      });
+    }
+  }
 
+  async getTaskAssignments(taskId: string): Promise<TaskAssignment[]> {
+    try {
+      const assignments = await TaskAssignmentModel.findAll({
+        where: { taskId },
+        include: [{ model: UserModel, as: 'user' }]
+      });
+      
+      return assignments.map(assignment => TaskAssignment.create({
+        id: assignment.id,
+        taskId: assignment.taskId,
+        userId: assignment.userId,
+        assignedAt: assignment.assignedAt,
+        createdAt: assignment.createdAt,
+        updatedAt: assignment.updatedAt
+      }));
+    } catch (error: any) {
+      console.error("Error in getTaskAssignments:", error);
+      throw new AppError({
+        status: HttpCode.INTERNAL_SERVER_ERROR,
+        message: 'Error retrieving task assignments',
+        detailsError: error
+      });
+    }
+  }
+
+  async removeTaskAssignment(taskId: string, userId: string, transaction?: Transaction): Promise<boolean> {
+    try {
+      const numDeleted = await TaskAssignmentModel.destroy({
+        where: { taskId, userId },
+        transaction
+      });
+      
+      return numDeleted > 0;
+    } catch (error: any) {
+      console.error("Error in removeTaskAssignment:", error);
+      throw new AppError({
+        status: HttpCode.INTERNAL_SERVER_ERROR,
+        message: 'Error removing task assignment',
+        detailsError: error
+      });
+    }
+  }
+
+  async findTaskAssignment(taskId: string, userId: string): Promise<TaskAssignment | null> {
+    try {
+      const assignment = await TaskAssignmentModel.findOne({
+        where: { taskId, userId }
+      });
+      
+      if (!assignment) {
+        return null;
+      }
+      
+      return TaskAssignment.create({
+        id: assignment.id,
+        taskId: assignment.taskId,
+        userId: assignment.userId,
+        assignedAt: assignment.assignedAt,
+        createdAt: assignment.createdAt,
+        updatedAt: assignment.updatedAt      });
+    } catch (error: any) {
+      console.error("Error in findTaskAssignment:", error);
+      throw new AppError({
+        status: HttpCode.INTERNAL_SERVER_ERROR,
+        message: 'Error finding task assignment',
+        detailsError: error
+      });
+    }
+  }
+  
   // Transaction management methods
   async getTransaction(): Promise<Transaction> {
     return await connection.transaction();
   }
-
+  
   async commitTransaction(transaction: Transaction): Promise<void> {
     await transaction.commit();
   }
-
+  
   async rollbackTransaction(transaction: Transaction): Promise<void> {
     await transaction.rollback();
   }

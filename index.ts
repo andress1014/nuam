@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { EventEmitter } from 'events';
+import * as dotenv from 'dotenv-flow';
 
-// Aumentar el límite de oyentes para evitar la advertencia "MaxListenersExceededWarning"
+// Load environment variables from .env files
+dotenv.config();
+
 EventEmitter.defaultMaxListeners = 20;
 
 import app from "./src/config/app";
@@ -10,7 +13,6 @@ import { DBPostgres } from './src/config/postgres/postgres-sequelize';
 import { HandlerException } from "./src/config/handlerException/handlerException";
 import { Logger } from "winston";
 
-// Use port from environment or default to 3000
 const port = process.env.PORT || 3000;
 
 declare global {
@@ -36,22 +38,17 @@ try {
   DBPostgres();
 } catch (error) {
   log.error('Failed to connect to database:', error);
-  // Continue even if database connection fails
 }
 
-// Handler for exceptions in Express routes
 app.use(HandlerException);
 
-// Create HTTP server with error handling
 const server = app.listen(port, () => {
   log.info(`[Server]: is running on port http://localhost:${port}`);
 });
 
-// Handle server errors
 server.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EADDRINUSE') {
     log.error(`Port ${port} is already in use. Trying to use a different port...`);
-    // Try a different port
     server.close();
     app.listen(0, () => {
       const address = server.address();

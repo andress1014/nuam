@@ -8,6 +8,7 @@ import { DeleteProjectUseCase } from '../application/use-cases/deleteProject.use
 //***************** DTOs **************//
 import { CreateProjectDto } from '../application/dto/createProject.dto';
 import { UpdateProjectDto } from '../application/dto/updateProject.dto';
+import { ShareProjectDto } from '../application/dto/shareProject.dto';
 //***************** services **************//
 import { ProjectRepository } from '../infrastructure/persistence/project.repository';
 import { handleResponse, HttpCode } from '../../../helpers';
@@ -19,9 +20,14 @@ import { validateGetProject } from '../validator/getProject.validator';
 import { validateGetUserProjects } from '../validator/getUserProjects.validator';
 import { validateUpdateProject } from '../validator/updateProject.validator';
 import { validateDeleteProject } from '../validator/deleteProject.validator';
+import { validateShareProject } from '../validator/shareProject.validator';
 
 // Instancia del repositorio necesario
 const projectRepository = new ProjectRepository();
+
+// Instancia de servicios
+import { ProjectSharingService } from '../services/projectSharing.service';
+const projectSharingService = new ProjectSharingService();
 
 // Instancia de casos de uso
 const createProjectUseCase = new CreateProjectUseCase(projectRepository);
@@ -29,6 +35,8 @@ const getProjectUseCase = new GetProjectUseCase(projectRepository);
 const getUserProjectsUseCase = new GetUserProjectsUseCase(projectRepository);
 const updateProjectUseCase = new UpdateProjectUseCase(projectRepository);
 const deleteProjectUseCase = new DeleteProjectUseCase(projectRepository);
+import { ShareProjectUseCase } from '../application/use-cases/shareProject.useCase';
+const shareProjectUseCase = new ShareProjectUseCase(projectSharingService);
 
 export const ProjectControllers = Router();
 
@@ -88,4 +96,18 @@ ProjectControllers.delete("/:id", validateDeleteProject, asyncHandler(async (req
   await deleteProjectUseCase.execute(id, userId);
 
   handleResponse(res, HttpCode.OK, { message: "Project deleted successfully" });
+}));
+
+/**
+ * Share project with users
+ */
+ProjectControllers.post("/:id/share", validateShareProject, asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { userIds, role } = req.body;
+  const sharedByUserId = req.user?.id;
+  
+  const shareProjectDto = new ShareProjectDto(id, userIds, role, sharedByUserId);
+  await shareProjectUseCase.execute(shareProjectDto);
+
+  handleResponse(res, HttpCode.OK, { message: "Project shared successfully" });
 }));
