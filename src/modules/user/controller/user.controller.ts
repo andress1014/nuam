@@ -13,6 +13,9 @@ import { UserRepository } from '../infrastructure/persistence/user.repository';
 import { handleResponse, HttpCode } from '../../../helpers';
 import { AuthMiddleware } from '../../../shared/middlewares/AuthMiddleware';
 import { asyncHandler } from '../../../shared/utils/asyncHandler';
+import { validateRegister } from '../validator/registerUser.validator';
+import { validateLogin } from '../validator/loginUser.validator';
+import { validateProfile } from '../validator/profileUser.validator';
 
 // Instancia de servicios necesarios
 const userRepository = new UserRepository();
@@ -29,7 +32,7 @@ export const UserControllers = Router();
 /**
  * Register a new user
  */
-UserControllers.post("/register", asyncHandler(async (req: Request, res: Response) => {
+UserControllers.post("/register", validateRegister, asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   const registerDto = new RegisterUserDto(name, email, password);
   const user = await registerUserUseCase.execute(registerDto);
@@ -40,7 +43,7 @@ UserControllers.post("/register", asyncHandler(async (req: Request, res: Respons
 /**
  * Login a user
  */
-UserControllers.post("/login", asyncHandler(async (req: Request, res: Response) => {
+UserControllers.post("/login", validateLogin, asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const loginDto = new LoginUserDto(email, password);
@@ -52,7 +55,7 @@ UserControllers.post("/login", asyncHandler(async (req: Request, res: Response) 
 /**
  * Get user profile
  */
-UserControllers.get("/profile", asyncHandler(async (req: Request, res: Response) => {
+UserControllers.get("/profile", validateProfile, asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const userProfile = await getUserProfileUseCase.execute(userId);
 

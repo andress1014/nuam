@@ -13,6 +13,12 @@ import { ProjectRepository } from '../infrastructure/persistence/project.reposit
 import { handleResponse, HttpCode } from '../../../helpers';
 import { asyncHandler } from '../../../shared/utils/asyncHandler';
 import { AuthMiddleware } from '../../../shared/middlewares/AuthMiddleware';
+//***************** validators **************//
+import { validateCreateProject } from '../validator/createProject.validator';
+import { validateGetProject } from '../validator/getProject.validator';
+import { validateGetUserProjects } from '../validator/getUserProjects.validator';
+import { validateUpdateProject } from '../validator/updateProject.validator';
+import { validateDeleteProject } from '../validator/deleteProject.validator';
 
 // Instancia del repositorio necesario
 const projectRepository = new ProjectRepository();
@@ -29,7 +35,7 @@ export const ProjectControllers = Router();
 /**
  * Create a new project
  */
-ProjectControllers.post("/", asyncHandler(async (req: Request, res: Response) => {
+ProjectControllers.post("/", validateCreateProject, asyncHandler(async (req: Request, res: Response) => {
   const { name, description } = req.body;
   const userId = req.user?.id;
   
@@ -42,7 +48,7 @@ ProjectControllers.post("/", asyncHandler(async (req: Request, res: Response) =>
 /**
  * Get a project by ID
  */
-ProjectControllers.get("/:id", asyncHandler(async (req: Request, res: Response) => {
+ProjectControllers.get("/:id", validateGetProject, asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const project = await getProjectUseCase.execute(id);
 
@@ -52,7 +58,7 @@ ProjectControllers.get("/:id", asyncHandler(async (req: Request, res: Response) 
 /**
  * Get all projects for the authenticated user
  */
-ProjectControllers.get("/", asyncHandler(async (req: Request, res: Response) => {
+ProjectControllers.get("/", validateGetUserProjects, asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const projects = await getUserProjectsUseCase.execute(userId);
 
@@ -62,7 +68,7 @@ ProjectControllers.get("/", asyncHandler(async (req: Request, res: Response) => 
 /**
  * Update a project
  */
-ProjectControllers.put("/:id", asyncHandler(async (req: Request, res: Response) => {
+ProjectControllers.put("/:id", validateUpdateProject, asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, description } = req.body;
   
@@ -75,7 +81,7 @@ ProjectControllers.put("/:id", asyncHandler(async (req: Request, res: Response) 
 /**
  * Delete a project
  */
-ProjectControllers.delete("/:id", asyncHandler(async (req: Request, res: Response) => {
+ProjectControllers.delete("/:id", validateDeleteProject, asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const userId = req.user?.id;
   

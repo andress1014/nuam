@@ -1,7 +1,8 @@
-import { Application, Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 
 //**************** helpers ******************************//
 import { handleError, AppError, HttpCode} from "../../helpers";
+import logger from "../logger/logger";
 
 /**
  * Realiza el mapeo de errores 
@@ -26,25 +27,23 @@ export const HandlerException = async (error: Error | AppError<any> | any, req: 
             message = error.message;
             detailsError = error.detailsError;
             
-           log.error('AppError captured:', { status, message, details: detailsError });
-        } else if (error instanceof Error) {
+            logger.error('AppError captured:', { status, message, details: detailsError });        } else if (error instanceof Error) {
             // Si es un Error normal, usa su mensaje
             message = error.message || 'Unknown error occurred';
         } else if (typeof error === 'string') {
             // Si es un string, úsalo como mensaje
             message = error;
         }
-        
-        log.error(`Error handling request to ${req.method} ${req.path}: ${message}`);
+          logger.error(`Error handling request to ${req.method} ${req.path}: ${message}`);
         
         if (error.stack) {
-            console.debug(error.stack);
+            logger.debug(error.stack);
         }
         
         handleError(res, status, message, detailsError);
     } catch (handlingError) {
         // In case the error handler itself throws an error
-       log.error('Error in error handler:', handlingError);
+        logger.error('Error in error handler:', handlingError);
         res.status(500).json({
             status: HttpCode.INTERNAL_SERVER_ERROR,
             message: 'An unexpected error occurred while processing your request'

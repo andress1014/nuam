@@ -12,11 +12,6 @@ const authMiddleware = new AuthMiddleware(jwtService);
 
 export const UserRouter = Router();
 
-// Apply validators to the router
-UserRouter.use('/register', validateRegister);
-UserRouter.use('/login', validateLogin);
-UserRouter.use('/profile', authMiddleware.authenticate, validateProfile);
-
 // Mount the controller
 UserRouter.use('/', UserControllers);
 
