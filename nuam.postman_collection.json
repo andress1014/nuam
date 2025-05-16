@@ -1,0 +1,823 @@
+{
+	"info": {
+		"_postman_id": "5b6d8438-f844-40e2-b460-1f19685568e3",
+		"name": "nuam",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24011191",
+		"_collection_link": "https://orange-star-121688.postman.co/workspace/nuam~455af10e-3ccb-4360-a4cf-18744c7c07bb/collection/24011191-5b6d8438-f844-40e2-b460-1f19685568e3?action=share&source=collection_link&creator=24011191"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"test@test.com\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzU5NTg1LCJleHAiOjE3NDc0NDU5ODV9.sRhW5TTRxf9P39Yu8XDTHjGkyzuq-tLE1aRJnJo2Wlc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"admin\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "project",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjViY2I3ODEtN2EyMS00MzQ4LTg1OWQtYTQ1M2FlMGFmNDg2IiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcyMDczLCJleHAiOjE3NDc0NTg0NzN9.xU572FZ30c2LerMiXGnU-jCfqx3HMlFtS_JWQuxfXkw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"asdasdsa\",\n    \"description\": \"Project name must be between 3 and 100 characters long\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get project by user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcxNDY0LCJleHAiOjE3NDc0NTc4NjR9.Nuw7hF77rJW3yymhkKojYCxQo3IM1bzwQmIRjctfgOQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "project by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzYxMTg5LCJleHAiOjE3NDc0NDc1ODl9.3A6naFHaDpBsY5DocRAUPVYYF31I3JhPpC1tDzNikco",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects/66c6d4e4-a167-46b2-afac-1bab6796720f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"66c6d4e4-a167-46b2-afac-1bab6796720f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzYxMTg5LCJleHAiOjE3NDc0NDc1ODl9.3A6naFHaDpBsY5DocRAUPVYYF31I3JhPpC1tDzNikco",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Proyecto Actualizado\",\n    \"description\": \"1\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects/66c6d4e4-a167-46b2-afac-1bab6796720f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"66c6d4e4-a167-46b2-afac-1bab6796720f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzYxMTg5LCJleHAiOjE3NDc0NDc1ODl9.3A6naFHaDpBsY5DocRAUPVYYF31I3JhPpC1tDzNikco",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects/c52461bb-1299-42ab-8a72-bc074cf44c4b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"c52461bb-1299-42ab-8a72-bc074cf44c4b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add member project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjViY2I3ODEtN2EyMS00MzQ4LTg1OWQtYTQ1M2FlMGFmNDg2IiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcyNDEzLCJleHAiOjE3NDc0NTg4MTN9.xLU1n0rBbaIUjYll9F4tcWbFS-5OFj1p1jBc6MOsoUk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcwMzEyLCJleHAiOjE3NDc0NTY3MTJ9.9YPrsjA-hGaAh__2CnN7gYsptAuqrV5uJrh6m80s5x4",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userIds\": [\"b1da810b-fe8f-46b0-83dc-a05343b599ce\"],\n    \"role\": \"editor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/projects/e07033ad-f3a5-44f6-b5b9-16472a543fe7/share",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"e07033ad-f3a5-44f6-b5b9-16472a543fe7",
+								"share"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcxMzQxLCJleHAiOjE3NDc0NTc3NDF9.KMay7c47IqEnhc9vJf2Affth9S3OMLsyONKGzm2l--c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY1NTcyLCJleHAiOjE3NDc0NTE5NzJ9.seRS7xtO7E9Fa8CisiTYz4o-NaIbEnx7RbKDuBh2ZaI",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"projectId\": \"e07033ad-f3a5-44f6-b5b9-16472a543fe7\",\n    \"title\": \"Implementar feature X\",\n    \"description\": \"Desarrollar la funcionalidad X siguiendo los requisitos\",\n    \"status\": \"pending\",\n    \"dueDate\": \"2025-05-30\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "history",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/3a098e3f-3cce-45aa-b8e4-8e995438011f/history",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"3a098e3f-3cce-45aa-b8e4-8e995438011f",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/3a098e3f-3cce-45aa-b8e4-8e995438011f/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"3a098e3f-3cce-45aa-b8e4-8e995438011f",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment to task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"Este es un comentario sobre la tarea\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/3a098e3f-3cce-45aa-b8e4-8e995438011f/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"3a098e3f-3cce-45aa-b8e4-8e995438011f",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/3a098e3f-3cce-45aa-b8e4-8e995438011f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"3a098e3f-3cce-45aa-b8e4-8e995438011f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Implementar feature X - Actualizado\",\n    \"description\": \"Descripción actualizada\",\n    \"status\": \"in_progress\",\n    \"dueDate\": \"2025-06-05\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/1e87ed6e-ba16-4002-aab7-5e42a23044c8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"1e87ed6e-ba16-4002-aab7-5e42a23044c8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all task to project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/project/5ed6942e-41e4-4b7e-b672-3a3ca05e86b6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"project",
+								"5ed6942e-41e4-4b7e-b672-3a3ca05e86b6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzY2MDMyLCJleHAiOjE3NDc0NTI0MzJ9.yTEb11N5u6AnqhMKmJDoQkhirYSAXryQwJA1UF1E-UU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TU_TOKEN_JWT",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/3a098e3f-3cce-45aa-b8e4-8e995438011f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"3a098e3f-3cce-45aa-b8e4-8e995438011f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "assign-tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMzQ1NjE2NjQtNTllYS00MGRlLTg3ZmMtNDBjYmRlODIyNTkwIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzQ3MzcwMzEyLCJleHAiOjE3NDc0NTY3MTJ9.9YPrsjA-hGaAh__2CnN7gYsptAuqrV5uJrh6m80s5x4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"assignments\": [\n    {\n      \"taskId\": \"7e1ed1ce-bb9e-40a5-af4c-af229cbe7c55\",\n      \"userId\": \"b1da810b-fe8f-46b0-83dc-a05343b599ce\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tasks/projects/e07033ad-f3a5-44f6-b5b9-16472a543fe7/assign-tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								"projects",
+								"e07033ad-f3a5-44f6-b5b9-16472a543fe7",
+								"assign-tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

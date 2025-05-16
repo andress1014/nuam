@@ -13,16 +13,16 @@ describe("should validate config postgress", () => {
   	await DBPostgres();
 
   	expect( connection.authenticate).toBeCalled();
-  })
-
+  });
+  
   it("validate connect error", async() => {
   	jest.spyOn(Sequelize.prototype, 'authenticate').mockRejectedValue(new Error("error de conection"));
   	try{
   		await DBPostgres();
 
   	}catch(error:any){
-  		 expect(error.message).toEqual('[DatabasePostgres]:Unable to connect to the database:');
+  		 expect(error.message).toEqual('[DatabasePostgres]: Unable to connect to the database: Error: error de conection');
   	}
-  })
+  });
 })
 
