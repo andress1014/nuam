@@ -34,6 +34,10 @@ app.use("/api/v1/user", UserRouter);
 // Project
 app.use("/api/v1/projects", ProjectRoutes);
 
+// Tasks
+import { TaskRoutes } from "../modules/task/routes";
+app.use("/api/v1/tasks", TaskRoutes);
+
 // Middleware para manejar errores 404
 app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new Error(`Route ${req.originalUrl} not found`);

@@ -4,9 +4,10 @@ export class JwtService {
   private readonly secretKey: string;
 
   constructor() {
-    // Use process.env.JWT_SECRET if available, otherwise use a fallback for development
-    this.secretKey = process.env.JWT_SECRET || 'default-development-secret-do-not-use-in-production';
-    console.log(`JWT Secret is ${this.secretKey ? 'configured' : 'missing'}`);
+    // Use a fixed secret key for development to ensure consistency
+    // In production, this should come from environment variables
+    this.secretKey = 'nuam-technical-test-secret-2025';
+    console.log('JWT Secret configured with fixed value for development');
   }
 
   createToken(payload: any): string {

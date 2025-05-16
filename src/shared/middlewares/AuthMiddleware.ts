@@ -8,7 +8,6 @@ export class AuthMiddleware {
     try {
       // Get the token from the Authorization header
       const authHeader = req.headers.authorization;
-      
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
           success: false,
