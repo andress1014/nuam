@@ -6,6 +6,7 @@ import environment from "dotenv-flow";
 import cors from "cors";
 import morgan from "morgan";
 import { UserRouter } from "../modules/user/routes";
+import { ProjectRoutes } from "../modules/project/routes";
 import { HandlerException } from "./handlerException/handlerException";
 
 environment.config({ silent: true });
@@ -29,6 +30,9 @@ app.use("/health", (req: Request, res: Response) => {
 
 // User
 app.use("/api/v1/user", UserRouter);
+
+// Project
+app.use("/api/v1/projects", ProjectRoutes);
 
 // Middleware para manejar errores 404
 app.use((req: Request, res: Response, next: NextFunction) => {

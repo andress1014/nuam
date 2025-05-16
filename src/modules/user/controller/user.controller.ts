@@ -52,7 +52,7 @@ UserControllers.post("/login", asyncHandler(async (req: Request, res: Response) 
 /**
  * Get user profile
  */
-UserControllers.get("/profile", authMiddleware.authenticate, asyncHandler(async (req: Request, res: Response) => {
+UserControllers.get("/profile", asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const userProfile = await getUserProfileUseCase.execute(userId);
 
