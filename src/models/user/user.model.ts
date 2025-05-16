@@ -6,9 +6,9 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
   public id!: string;
   public name!: string;
   public email!: string;
-  public password!: string;
+  public password_hash!: string;
   
-  public readonly createdAt!: Date;
+  public readonly created_at!: Date;
   public readonly updatedAt!: Date;
 
   // Static method to initialize the model
@@ -31,11 +31,12 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
           validate: {
             isEmail: true,
           },
-        },
-        password: {
-          type: DataTypes.STRING(100),
+        },        password_hash: {
+          type: DataTypes.STRING(255),
           allowNull: false,
-        },        createdAt: {
+          field: 'password_hash'
+        },
+        created_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW,
           field: 'created_at',
@@ -50,18 +51,17 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> imp
         sequelize,
         tableName: 'users',
         timestamps: true,
-        underscored: true,
-        hooks: {
+        underscored: true,        hooks: {
           beforeCreate: async (user: UserModel) => {
-            if (user.password) {
+            if (user.password_hash) {
               const salt = await bcrypt.genSalt(10);
-              user.password = await bcrypt.hash(user.password, salt);
+              user.password_hash = await bcrypt.hash(user.password_hash, salt);
             }
           },
           beforeUpdate: async (user: UserModel) => {
-            if (user.changed('password')) {
+            if (user.changed('password_hash')) {
               const salt = await bcrypt.genSalt(10);
-              user.password = await bcrypt.hash(user.password, salt);
+              user.password_hash = await bcrypt.hash(user.password_hash, salt);
             }
           }
         }

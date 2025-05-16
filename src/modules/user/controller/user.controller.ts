@@ -15,7 +15,7 @@ import { AuthMiddleware } from '../../../shared/middlewares/AuthMiddleware';
 
 // Instancia de servicios necesarios
 const userRepository = new UserRepository();
-const jwtService = new JwtService(process.env.JWT_SECRET || '');
+const jwtService = new JwtService(); // No se requiere JWT_SECRET como parámetro
 const authMiddleware = new AuthMiddleware(jwtService);
 
 // Instancia de casos de uso
@@ -40,14 +40,26 @@ UserControllers.post("/register", async (req: Request, res: Response) => {
  * Login a user
  */
 UserControllers.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const loginDto = new LoginUserDto(email, password);
-  const loginResponse = await loginUserUseCase.execute(loginDto);
+    const loginDto = new LoginUserDto(email, password);
+    const loginResponse = await loginUserUseCase.execute(loginDto);
 
-  handleResponse(res, 200, loginResponse)
-}
-);
+    handleResponse(res, 200, loginResponse);
+  } catch (error) {
+    console.error("Error in login controller:", error);
+    if (error instanceof Error) {
+      if (error.message === 'Invalid credentials') {
+        handleResponse(res, 401, { message: "Invalid email or password" });
+      } else {
+        handleResponse(res, 500, { message: "An error occurred during login" });
+      }
+    } else {
+      handleResponse(res, 500, { message: "An unknown error occurred" });
+    }
+  }
+});
 
 /**
  * Get user profile

@@ -31,15 +31,10 @@ export const connection = new Sequelize(POSTGRES_DB, POSTGRES_USER, POSTGRES_PAS
  */
 export const DBPostgres = async () => {
   try {
-    // Initialize all models
-    initializeModels(connection);
-
-    await connection.authenticate();
+    initializeModels(connection);    await connection.authenticate();
     log.info('[DatabasePostgres]: Connection has been established successfully.');
-      // Force sync models with the database - this will drop and recreate tables
-    // Note: Remove force:true after initial setup to avoid data loss
-    await connection.sync({ force: true });
-    log.info('[DatabasePostgres]: Models synchronized with database (tables recreated).');
+    await connection.sync({ force: false, alter: true });
+    log.info('[DatabasePostgres]: Models synchronized with database.');
     
     return connection;
   } catch (error) {

@@ -4,9 +4,9 @@ export class UserEntity extends Model {
   public id!: string;
   public name!: string;
   public email!: string;
-  public password!: string;
+  public password_hash!: string;
   
-  public readonly createdAt!: Date;
+  public readonly created_at!: Date;
   public readonly updatedAt!: Date;
 
   // Static method to initialize the model
@@ -29,12 +29,12 @@ export class UserEntity extends Model {
           validate: {
             isEmail: true,
           },
-        },
-        password: {
-          type: DataTypes.STRING(100),
+        },        password_hash: {
+          type: DataTypes.STRING(255),
           allowNull: false,
+          field: 'password_hash',
         },
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW,
           field: 'created_at',

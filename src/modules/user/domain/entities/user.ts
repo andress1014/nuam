@@ -4,8 +4,8 @@ export class User {
     public id: string,
     public name: string,
     public email: string,
-    public password: string,
-    public createdAt?: Date,
+    public password_hash: string,
+    public created_at?: Date,
     public updatedAt?: Date
   ) {}
 
@@ -13,16 +13,15 @@ export class User {
     id?: string;
     name: string;
     email: string;
-    password: string;
-    createdAt?: Date;
+    password_hash: string;
+    created_at?: Date;
     updatedAt?: Date;
-  }): User {
-    return new User(
+  }): User {    return new User(
       props.id || '',
       props.name,
       props.email,
-      props.password,
-      props.createdAt,
+      props.password_hash,
+      props.created_at,
       props.updatedAt
     );
   }
@@ -32,7 +31,7 @@ export class User {
       id: this.id,
       name: this.name,
       email: this.email,
-      createdAt: this.createdAt,
+      created_at: this.created_at,
       updatedAt: this.updatedAt
     };
   }

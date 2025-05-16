@@ -4,8 +4,8 @@ import { BaseAttributes, BaseCreationAttributes } from '../base.interface';
 export interface UserAttributes extends BaseAttributes {
   name: string;
   email: string;
-  password: string;
-  createdAt?: Date;
+  password_hash: string;
+  created_at?: Date;
 }
 
 // User creation attributes (password is required during creation, id can be omitted)
